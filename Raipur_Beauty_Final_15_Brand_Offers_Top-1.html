@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Raipur Beauty</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#f7f7f7;color:#222}
+button,input,select,textarea{font:inherit}button{cursor:pointer;border:0;border-radius:9px;padding:10px 13px}
+header{position:sticky;top:0;z-index:20;background:#fff;border-bottom:1px solid #ddd}
+.top{display:flex;align-items:center;gap:8px;padding:11px 12px}.logo{flex:1;font-size:21px;font-weight:800;color:#e91e63}
+.adminTop{background:#111;color:#fff;font-weight:700}.dots{font-size:25px;background:#fff}
+.search{display:block;width:calc(100% - 24px);margin:0 12px 10px;padding:11px;border:1px solid #ddd;border-radius:10px}
+.promo{background:#e91e63;color:#fff;text-align:center;font-weight:800;padding:9px;font-size:14px}
+.offer{background:#111;color:#fff;text-align:center;padding:9px;font-weight:700}
+.cats{display:flex;gap:7px;overflow:auto;padding:9px 12px;background:#fff;border-bottom:1px solid #eee}.cats button{white-space:nowrap;background:#eee}
+main{max-width:1000px;margin:auto;padding:12px}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px}
+.card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 5px #ddd}.pic{width:100%;aspect-ratio:1/1;object-fit:cover;background:#eee}
+.info{padding:10px}.name{font-weight:700}.desc{font-size:13px;color:#666;margin:5px 0}.price{font-size:18px;font-weight:800}
+.buy{width:100%;margin-top:8px;background:#e91e63;color:#fff;font-weight:700}
+.cartFloat{position:fixed;right:14px;bottom:14px;background:#e91e63;color:#fff;border-radius:25px;z-index:25;box-shadow:0 3px 12px #aaa}
+.menu{display:none;position:fixed;right:12px;top:57px;background:#fff;border:1px solid #ddd;border-radius:10px;box-shadow:0 4px 18px #aaa;z-index:50;min-width:190px}.menu button{display:block;width:100%;text-align:left;background:#fff;border-radius:0}
+.modal{display:none;position:fixed;inset:0;background:#0008;z-index:100;padding:15px;overflow:auto}.box{background:#fff;max-width:700px;margin:4vh auto;padding:18px;border-radius:14px}
+input,select,textarea{width:100%;padding:11px;border:1px solid #ccc;border-radius:8px;margin:5px 0 9px}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.statgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{border:1px solid #ddd;border-radius:10px;padding:12px;text-align:center}.stat b{font-size:22px;display:block}
+.ordercard{border:1px solid #ddd;border-radius:10px;padding:11px;margin:8px 0;background:#fafafa}
+.aiButton{position:fixed;left:14px;bottom:14px;background:#111;color:#fff;border-radius:25px;z-index:25}.artistButton{position:fixed;left:14px;bottom:60px;background:#8e24aa;color:#fff;border-radius:25px;z-index:25}
+.steps{display:flex;gap:5px;margin:12px 0}.step{flex:1;text-align:center;background:#eee;padding:8px 3px;border-radius:7px;font-size:11px}.step.on{background:#e91e63;color:#fff;font-weight:bold}
+.thumbRow{display:flex;gap:7px;overflow:auto;margin:8px 0}.thumb{width:65px;height:65px;object-fit:cover;border-radius:7px;border:1px solid #ddd}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}
+.offerSee{background:#111;text-align:center;padding:0 0 9px}.offerSee button{background:#fff;color:#e91e63;font-weight:800;border-radius:18px;padding:7px 16px}.offerItem{border:1px solid #eee;border-radius:10px;padding:11px;margin:8px 0;background:#fff}.offerBrand{font-weight:800;font-size:16px}.offerDesc{color:#555;margin-top:4px;white-space:pre-wrap}''
+.brandOfferHero{background:linear-gradient(135deg,#e91e63,#ad1457);color:#fff;text-align:center;padding:12px 10px 11px;border-bottom:1px solid #ddd}
+.brandOfferTitle{font-size:19px;font-weight:900;letter-spacing:.3px}
+.brandOfferSub{font-size:12px;margin:3px 0 8px;opacity:.95}
+.brandOfferHero button{background:#fff;color:#e91e63;font-weight:900;border-radius:22px;padding:9px 18px;box-shadow:0 2px 7px #0004}
+</style>
+</head>
+<body>
+<header>
+<div class="top"><div class="logo">💄 Raipur Beauty</div><button class="adminTop" onclick="openAdminLogin()">🔐 Admin</button><button class="dots" onclick="toggleMenu()">⋮</button></div>
+<input id="search" class="search" placeholder="Search products..." oninput="renderProducts()">
+</header>
+<div id="promo" class="promo"></div>
+<div id="offer" class="offer"></div><div class="cats">
+<button onclick="setCat('All')">All</button><button onclick="setCat('Skin')">Skin</button><button onclick="setCat('Face')">Face</button><button onclick="setCat('Eye')">Eye</button><button onclick="setCat('Lip')">Lip</button><button onclick="setCat('Nail')">Nail</button>
+</div>
+
+<div id="menu" class="menu">
+<button onclick="openCart()">🛒 Cart</button><button onclick="openTrack()">📦 Track Order</button><button onclick="openAI()">🤖 Beauty AI</button><button onclick="openArtist()">💄 Book Makeup Artist</button><button onclick="openAdminLogin()">🔐 Admin</button>
+</div>
+
+<main><div id="products" class="grid"></div></main>
+
+<button class="aiButton" onclick="openAI()">🤖 Beauty AI</button>
+<button class="artistButton" onclick="openArtist()">💄 Book Artist</button>
+<button class="cartFloat" onclick="openCart()">🛒 Cart (<span id="cartCount">0</span>)</button>
+
+<!-- Login -->
+<div id="loginModal" class="modal"><div class="box">
+<h2>🔐 Admin Login</h2><input id="adminPassword" type="password" placeholder="Admin password">
+<button class="buy" onclick="loginAdmin()">Login</button><button onclick="closeModal('loginModal')">Cancel</button>
+</div></div>
+
+<!-- Admin -->
+<div id="adminModal" class="modal"><div class="box">
+<h2>📊 Admin Dashboard</h2>
+<div class="statgrid"><div class="stat"><b id="sOrders">0</b>Orders</div><div class="stat"><b id="sSales">₹0</b>Sales</div><div class="stat"><b id="sCustomers">0</b>Customers</div><div class="stat"><b id="sActive">0</b>Active</div></div>
+<h3>🔥 Top Promotion</h3>
+<input id="promoTitle" placeholder="RAIPUR BEST OFFER">
+<input id="promoDate" placeholder="15 August - 20 August">
+<input id="promoAmount" placeholder="UP TO 30% OFF">
+<button onclick="savePromo()">Update Top Banner</button>
+<h3>🎁 Offer</h3>
+<select id="offerMode"><option value="auto">Auto Offer</option><option value="manual">Manual Offer</option></select>
+<input id="offerText" placeholder="Example: 🔥 Buy 2 = 10% OFF">
+<button onclick="saveOffer()">Update Offer</button>
+<h4>🏷️ Brand-wise Offers — Maximum 15 Brands</h4>
+<p style="font-size:12px;color:#666">Har line mein: <b>Brand Name — Customer ko jo exact offer dikhana hai</b>.</p>
+<textarea id="brandOffers" rows="10" maxlength="2500" placeholder="Lakmé — Buy 2 = 10% OFF
+Maybelline — Flat 15% OFF
+MAC — Up to 20% OFF
+L'Oréal — Flat ₹100 OFF"></textarea>
+<button onclick="saveBrandOffers()">Save 15 Brand Offers</button><button onclick="clearBrandOffers()" style="margin-left:6px">Clear All</button>
+<div id="brandOfferCount" style="font-size:12px;color:#777;margin-top:6px"></div>
+<hr>
+<h3>👥 Customer / Order Data</h3>
+<input id="adminSearch" placeholder="Search name, mobile or tracking ID" oninput="renderAdmin()">
+<div id="adminOrders"></div>
+<hr>
+<h3>➕ Add Product</h3>
+<input id="pName" placeholder="Product name"><div class="row"><input id="pPrice" type="number" placeholder="Price ₹"><input id="pStock" type="number" placeholder="Stock"></div>
+<select id="pCat"><option>Skin</option><option>Face</option><option>Eye</option><option>Lip</option><option>Nail</option></select>
+<textarea id="pDesc" placeholder="Description"></textarea><input id="pImage" type="file" accept="image/*" multiple>
+<button class="buy" onclick="addProduct()">Add Product</button>
+<br><br><button onclick="closeModal('adminModal')">Close</button><button onclick="logout()" style="margin-left:6px">Logout</button>
+</div></div>
+
+<!-- Product -->
+<div id="productModal" class="modal"><div class="box"><div id="productDetail"></div><button onclick="closeModal('productModal')">Close</button></div></div>
+
+<!-- Cart -->
+<div id="cartModal" class="modal"><div class="box">
+<h2>🛒 Your Cart</h2><div id="cartItems"></div><h3 id="cartTotal"></h3>
+<input id="custName" placeholder="Name"><input id="custPhone" placeholder="Mobile number" inputmode="numeric"><textarea id="custAddress" placeholder="Delivery address"></textarea>
+<select id="payment"><option>COD</option><option>ONLINE</option></select>
+<label><input id="agree" type="checkbox" style="width:auto"> I agree to Terms & Conditions: No Return / No Exchange.</label>
+<button class="buy" onclick="placeOrder()">Confirm Order</button><button onclick="closeModal('cartModal')">Close</button>
+</div></div>
+
+<!-- Track -->
+<div id="trackModal" class="modal"><div class="box">
+<h2>📦 Track Order</h2><input id="trackId" placeholder="Tracking ID e.g. RB12345678"><button class="buy" onclick="trackOrder()">Track</button><div id="trackResult"></div><button onclick="closeModal('trackModal')">Close</button>
+</div></div>
+
+<!-- Offers -->
+<div id="offersModal" class="modal"><div class="box"><h2>🔥 Brand-wise Offers</h2><div id="offerList"></div><button onclick="closeModal('offersModal')">Close</button></div></div>
+<!-- AI -->
+<div id="aiModal" class="modal"><div class="box">
+<h2>🤖 Beauty AI</h2><p>Makeup se related koi bhi question poochiye.</p>
+<input id="aiQuestion" placeholder="Example: Primer ke baad kya lagau?" onkeydown="if(event.key==='Enter')askAI()">
+<button class="buy" onclick="askAI()">Ask Beauty AI</button><div id="aiAnswer" style="background:#fafafa;padding:12px;border-radius:10px;margin-top:10px"></div>
+<hr><h3>✨ Personal Suggestion</h3>
+<select id="aiBudget"><option value="">Budget</option><option value="low">Under ₹500</option><option value="mid">₹500–₹1000</option><option value="high">₹1000+</option></select><select id="skinType"><option value="">Skin Type</option><option>Dry</option><option>Oily</option><option>Combination</option><option>Normal</option></select>
+<select id="desiredLook"><option>Daily Natural</option><option>Office</option><option>Party</option><option>Wedding</option><option>Glam</option></select>
+<button onclick="personalAI()">Suggest Products</button><div id="personalAnswer"></div>
+<button onclick="openArtist()">💄 Book Makeup Artist</button><button onclick="closeModal('aiModal')">Close</button>
+</div></div>
+
+<!-- Artist -->
+<div id="artistModal" class="modal"><div class="box">
+<h2>💄 Book Your Makeup Artist</h2><p>Customer Support: <a href="tel:+917247266368">7247266368</a></p>
+<input id="artistName" placeholder="Name"><input id="artistPhone" placeholder="Mobile">
+<input id="artistDate" type="date"><select id="artistService"><option>Party Makeup</option><option>Bridal Makeup</option><option>Engagement Makeup</option><option>Other</option></select>
+<button class="buy" onclick="bookArtist()">Send Booking Request</button><button onclick="closeModal('artistModal')">Close</button>
+</div></div>
+
+<script>
+const ADMIN_PASSWORD="Lakme@9131";
+const defaultProducts=[
+{id:1,name:"Lakmé 9 to 5 Primer + Matte Lip Color",price:599,stock:20,category:"Lip",desc:"Long-lasting matte finish lipstick.",images:[]},
+{id:2,name:"Lakmé Absolute Matte Revolution Lip Color",price:750,stock:15,category:"Lip",desc:"Rich colour with comfortable matte finish.",images:[]},
+{id:3,name:"Lakmé Eyeconic Kajal",price:225,stock:30,category:"Eye",desc:"Smooth kajal for an intense eye look.",images:[]},
+{id:4,name:"Lakmé Absolute Skin Dew Serum",price:899,stock:10,category:"Skin",desc:"Lightweight skincare serum.",images:[]}
+];
+let products=load("rb_products",defaultProducts),cart=load("rb_cart",[]),orders=load("rb_orders",[]);
+let promo=load("rb_promo",{title:"🔥 RAIPUR BEST OFFER 🔥",date:"Today",amount:"UP TO 30% OFF"});
+let brandOffers=load("rb_brand_offers",[{brand:"Lakmé",description:"Buy 2 = 10% OFF"},{brand:"Maybelline",description:"Flat 15% OFF"}]);
+let offer=load("rb_offer",{mode:"auto",text:"🔥 BUY 2 = 10% OFF | BUY 3+ = LOWEST PRICED ITEM FREE 🎁"});
+let activeCat="All",admin=false;
+
+function load(k,f){try{return JSON.parse(localStorage.getItem(k))??f}catch(e){return f}}
+function save(){localStorage.setItem("rb_products",JSON.stringify(products));localStorage.setItem("rb_cart",JSON.stringify(cart));localStorage.setItem("rb_orders",JSON.stringify(orders))}
+function esc(x){return String(x??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function $(id){return document.getElementById(id)}
+function closeModal(id){$(id).style.display="none"}
+function toggleMenu(){let m=$("menu");m.style.display=m.style.display==="block"?"none":"block"}
+function setCat(c){activeCat=c;renderProducts()}
+function openAdminLogin(){ $("menu").style.display="none"; $("loginModal").style.display="block"}
+function loginAdmin(){if($("adminPassword").value===ADMIN_PASSWORD){admin=true;closeModal("loginModal");renderAdmin();$("adminModal").style.display="block"}else alert("Wrong password")}
+function logout(){admin=false;closeModal("adminModal")}
+function openCart(){$("menu").style.display="none";renderCart();$("cartModal").style.display="block"}
+function openTrack(){$("menu").style.display="none";$("trackModal").style.display="block"}
+function openAI(){$("menu").style.display="none";$("aiModal").style.display="block"}
+function openArtist(){$("menu").style.display="none";$("artistModal").style.display="block"}
+
+function openOffers(){
+  $("offerList").innerHTML=brandOffers.length?brandOffers.map((x,i)=>`<div class="offerItem"><div class="offerBrand">${i+1}. ${esc(x.brand)}</div><div class="offerDesc">${esc(x.description)}</div></div>`).join(""):"<p>No active offers right now.</p>";
+  $("offersModal").style.display="block";
+}
+function saveBrandOffers(){
+  const raw=$("brandOffers").value.trim();
+  if(!raw)return alert("Brand offers likhiye.");
+  const lines=raw.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+  if(lines.length>15)return alert("Maximum 15 brand offers hi add kar sakte hain.");
+  const parsed=lines.map(line=>{const parts=line.split(/\s*[—:-]\s*/);return{brand:(parts.shift()||"Offer").trim(),description:parts.join(" - ").trim()||"Special offer"}}).filter(x=>x.brand&&x.description);
+  if(!parsed.length)return alert("Valid brand offers nahi mile.");
+  brandOffers=parsed;
+  localStorage.setItem("rb_brand_offers",JSON.stringify(brandOffers));
+  updateBrandOfferCount();
+  renderProducts();
+  alert("Offers saved. Customer ko yahi offers dikhenge.");
+}
+function updateBrandOfferCount(){const el=$("brandOfferCount");if(el)el.textContent=brandOffers.length+"/15 brand offers saved";}
+
+function clearBrandOffers(){if(confirm("Saare brand offers delete karein?")){brandOffers=[];localStorage.setItem("rb_brand_offers","[]");$("brandOffers").value="";}}
+function renderProducts(){
+$("promo").textContent=promo.title+" | "+promo.date+" | "+promo.amount;
+$("offer").textContent=offer.text;
+let q=$("search").value.toLowerCase();
+let list=products.filter(p=>(activeCat==="All"||p.category===activeCat)&&(p.name+" "+p.category+" "+p.desc).toLowerCase().includes(q));
+$("products").innerHTML=list.map(p=>`
+<div class="card" onclick="openProduct(${p.id})">
+<img class="pic" src="${p.images?.[0]||placeholder()}">
+<div class="info"><div class="name">${esc(p.name)}</div><div class="desc">${esc(p.desc)}</div><div class="price">₹${p.price}</div>
+<div style="font-size:12px;color:${p.stock>0?'#188038':'#d32f2f'}">Available: ${p.stock}</div>
+<button class="buy" onclick="event.stopPropagation();addCart(${p.id})">Add to Cart</button></div></div>`).join("")||"<p>No products found.</p>";
+updateCount()
+}
+function placeholder(){return "data:image/svg+xml;charset=UTF-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="500" height="500"><rect width="100%" height="100%" fill="#eee"/><text x="50%" y="50%" text-anchor="middle" fill="#999" font-size="22">Product Photo</text></svg>')}
+function addCart(id){let p=products.find(x=>x.id===id);let qty=cart.filter(x=>x===id).length;if(!p||p.stock<=qty)return alert("Available quantity khatam hai.");cart.push(id);save();updateCount();alert("Product cart mein add ho gaya")}
+function updateCount(){$("cartCount").textContent=cart.length}
+function openProduct(id){let p=products.find(x=>x.id===id);if(!p)return;let related=products.filter(x=>x.id!==id&&x.category===p.category).slice(0,4);$("productDetail").innerHTML=`
+<h2>${esc(p.name)}</h2><div class="thumbRow">${(p.images?.length?p.images:[placeholder()]).map(x=>`<img class="thumb" src="${x}">`).join("")}</div>
+<img style="width:100%;max-height:330px;object-fit:contain" src="${p.images?.[0]||placeholder()}"><p>${esc(p.desc)}</p><h2>₹${p.price}</h2>
+<button class="buy" onclick="addCart(${p.id})">Add to Cart</button>
+<h3>✨ You may also like</h3>${related.map(x=>`<div class="ordercard">${esc(x.name)} — ₹${x.price}</div>`).join("")||"No related products."}`;
+$("productModal").style.display="block"}
+
+function renderCart(){
+let count={};cart.forEach(id=>count[id]=(count[id]||0)+1);
+let items=Object.entries(count).map(([id,q])=>{let p=products.find(x=>x.id==id);return p?{p,q}:null}).filter(Boolean);
+$("cartItems").innerHTML=items.length?items.map(x=>`<div class="ordercard"><b>${esc(x.p.name)}</b><br>₹${x.p.price} × ${x.q}<br><button onclick="removeOne(${x.p.id})">−</button> <button onclick="addCart(${x.p.id})">+</button></div>`).join(""):"Cart empty";
+let total=items.reduce((s,x)=>s+x.p.price*x.q,0);$("cartTotal").textContent="Total: ₹"+total}
+function removeOne(id){let i=cart.indexOf(id);if(i>=0)cart.splice(i,1);save();renderCart();updateCount()}
+
+function placeOrder(){
+if(!cart.length)return alert("Cart empty hai");
+let n=$("custName").value.trim(),ph=$("custPhone").value.trim(),ad=$("custAddress").value.trim();
+if(!n||!ph||!ad)return alert("Name, mobile aur address bharna zaroori hai");
+if(!$("agree").checked)return alert("Terms & Conditions ko agree karein");
+let count={};cart.forEach(id=>count[id]=(count[id]||0)+1);
+for(let id in count){let p=products.find(x=>x.id==id);if(!p||p.stock<count[id])return alert("Stock available nahi hai")}
+let items=Object.entries(count).map(([id,q])=>{let p=products.find(x=>x.id==id);p.stock-=q;return{name:p.name,qty:q,price:p.price}});
+let subtotal=items.reduce((s,x)=>s+x.price*x.qty,0),discount=cart.length===2?subtotal*.1:cart.length>=3?Math.min(...items.flatMap(x=>Array(x.qty).fill(x.price))):0;
+let total=Math.max(0,Math.round(subtotal-discount)),tracking="RB"+String(Date.now()).slice(-8);
+orders.push({id:Date.now(),trackingId:tracking,name:n,phone:ph,address:ad,items,total,payment:$("payment").value,date:new Date().toISOString(),status:"Order Confirmed"});
+cart=[];save();renderProducts();closeModal("cartModal");alert("Order confirmed!\\nTracking ID: "+tracking+"\\nDelivery: Within 3 days")}
+function trackOrder(){let id=$("trackId").value.trim().toUpperCase(),o=orders.find(x=>x.trackingId===id);if(!o){$("trackResult").innerHTML="<p>❌ Tracking ID nahi mila.</p>";return}let level=o.status==="Delivered"?3:o.status==="Out for Delivery"?2:o.status==="Packed"?1:0;$("trackResult").innerHTML=`<div class="ordercard"><b>${esc(o.trackingId)}</b><br>₹${o.total}<br>${new Date(o.date).toLocaleString()}<div class="steps"><div class="step ${level>=0?'on':''}">Confirmed</div><div class="step ${level>=1?'on':''}">Packed</div><div class="step ${level>=2?'on':''}">Out for Delivery</div><div class="step ${level>=3?'on':''}">Delivered</div></div><b>${esc(o.status)}</b></div>`}
+
+function renderAdmin(){
+let sales=orders.reduce((s,o)=>s+o.total,0),phones=new Set(orders.map(o=>o.phone));$("sOrders").textContent=orders.length;$("sSales").textContent="₹"+sales;$("sCustomers").textContent=phones.size;$("sActive").textContent=orders.filter(o=>o.status!=="Delivered").length;
+$("promoTitle").value=promo.title;$("promoDate").value=promo.date;$("promoAmount").value=promo.amount;$("offerMode").value=offer.mode;$("offerText").value=offer.text;$("brandOffers").value=brandOffers.map(x=>x.brand+" — "+x.description).join("\n");updateBrandOfferCount();
+let q=$("adminSearch").value.toLowerCase();let list=orders.slice().reverse().filter(o=>(o.name+" "+o.phone+" "+o.trackingId).toLowerCase().includes(q));
+$("adminOrders").innerHTML=list.map(o=>`<div class="ordercard"><b>👤 ${esc(o.name)}</b><br>📱 ${esc(o.phone)}<br>📦 ${esc(o.trackingId)}<br>📅 ${new Date(o.date).toLocaleString()}<br>🛍️ ${o.items.map(x=>esc(x.name)+" × "+x.qty).join(", ")}<br>💳 ${o.payment} • ₹${o.total}<br>🏠 ${esc(o.address)}<br><select onchange="setStatus(${o.id},this.value)"><option ${o.status==="Order Confirmed"?"selected":""}>Order Confirmed</option><option ${o.status==="Packed"?"selected":""}>Packed</option><option ${o.status==="Out for Delivery"?"selected":""}>Out for Delivery</option><option ${o.status==="Delivered"?"selected":""}>Delivered</option></select></div>`).join("")||"No orders yet"}
+function setStatus(id,s){let o=orders.find(x=>x.id===id);if(o)o.status=s;save();renderAdmin()}
+function savePromo(){promo={title:$("promoTitle").value||"🔥 RAIPUR BEST OFFER 🔥",date:$("promoDate").value||"Today",amount:$("promoAmount").value||"UP TO 30% OFF"};localStorage.setItem("rb_promo",JSON.stringify(promo));renderProducts();alert("Top banner updated")}
+function saveOffer(){offer={mode:$("offerMode").value,text:$("offerText").value||"🔥 BEAUTY OFFER 🔥"};localStorage.setItem("rb_offer",JSON.stringify(offer));renderProducts();alert("Offer updated")}
+function addProduct(){
+let name=$("pName").value.trim(),price=Number($("pPrice").value),stock=Number($("pStock").value||0),cat=$("pCat").value,desc=$("pDesc").value.trim(),files=[...$("pImage").files];
+if(!name||!price)return alert("Name aur price bharna zaroori hai");
+let imgs=[],done=0;if(!files.length)finish();else files.forEach(f=>{let r=new FileReader();r.onload=()=>{imgs.push(r.result);done++;if(done===files.length)finish()};r.readAsDataURL(f)});
+function finish(){products.unshift({id:Date.now(),name,price,stock,category:cat,desc,images:imgs});save();renderProducts();alert("Product added")}
+}
+
+function askAI(){
+let q=$("aiQuestion").value.trim().toLowerCase();if(!q)return alert("Question likhiye");
+let a;
+if(q.includes("primer")&&(q.includes("baad")||q.includes("after")||q.includes("next")))a="Primer ke baad foundation/skin tint, phir zarurat ho to concealer, setting powder, blush/contour aur eye makeup. Daytime mein sunscreen makeup se pehle.";
+else if(q.includes("primer")&&(q.includes("benefit")||q.includes("fayda")||q.includes("kaam")))a="Primer smoother-looking base banane aur makeup ko better hold karne mein help karta hai. Oily skin ke liye mattifying aur dry skin ke liye hydrating primer useful ho sakta hai.";
+else if(q.includes("foundation"))a="Foundation complexion ko even-looking banata hai. Shade jawline par test karein. Oily skin ke liye lightweight/matte aur dry skin ke liye hydrating formula try karein.";
+else if(q.includes("concealer"))a="Concealer under-eye ya required areas par small amount mein lagakar blend karein.";
+else if(q.includes("blush"))a="Blush cheeks ko fresh look deta hai. Small amount se start karke gently blend karein.";
+else if(q.includes("lipstick")||q.includes("lip color"))a="Lipstick colour aur finish deta hai. Lips moisturise karke excess balm remove karein, phir lip colour lagayein.";
+else if(q.includes("kajal")||q.includes("eyeliner"))a="Kajal/eyeliner eyes ko define karta hai. Daily look ke liye thin line try karein.";
+else if(q.includes("mascara"))a="Mascara lashes ko darker aur defined-looking banata hai. Carefully apply karein.";
+else if(q.includes("powder"))a="Setting powder shine reduce aur makeup set karne mein help karta hai. Oily areas par thin layer use karein.";
+else if(q.includes("step")||q.includes("routine")||q.includes("sequence"))a="Basic sequence: moisturizer → sunscreen (daytime) → primer → foundation → concealer → powder → blush/contour → eyes → lipstick → optional setting spray.";
+else if(q.includes("oily"))a="Oily skin ke liye lightweight, oil-control/mattifying formulas useful ho sakte hain.";
+else if(q.includes("dry"))a="Dry skin ke liye hydrating skincare aur comfortable, non-drying makeup textures choose karein.";
+else a="Aap primer, foundation, concealer, blush, lipstick, kajal, mascara, makeup steps aur skin type ke baare mein pooch sakte hain. Exact question poochiye, main guide karunga.";
+$("aiAnswer").innerHTML="<b>🤖 Beauty AI:</b><br>"+a}
+function personalAI(){let s=$("skinType").value,l=$("desiredLook").value,b=$("aiBudget").value;if(!s)return alert("Skin type select karein");let budget=b==="low"?"under ₹500":b==="mid"?"₹500–₹1000":b==="high"?"₹1000+":"any budget";let m=products.slice().sort((a,b)=>a.price-b.price).slice(0,4);$("personalAnswer").innerHTML="<div class='ordercard'><b>🤖 Beauty AI Suggestion</b><br>Skin: "+esc(s)+"<br>Budget: "+esc(budget)+"<br>Look: "+esc(l)+"<br><br>Recommended store products:<br>"+(m.length?m.map(p=>esc(p.name)+" — ₹"+p.price).join("<br>"):"No products yet.")+"</div>"}
+function bookArtist(){let n=$("artistName").value.trim(),p=$("artistPhone").value.trim(),d=$("artistDate").value,s=$("artistService").value;if(!n||!p||!d)return alert("Name, mobile aur date bharna zaroori hai");let msg="💄 Makeup Artist Booking%0A%0A👤 Customer Name: "+encodeURIComponent(n)+"%0A📱 Mobile: "+encodeURIComponent(p)+"%0A📅 Date: "+encodeURIComponent(d)+"%0A💄 Service: "+encodeURIComponent(s)+"%0A%0APlease contact customer for confirmation.";window.open("https://wa.me/917247266368?text="+msg,"_blank")}
+
+renderProducts();
+</script>
+</body>
+</html<div id="brandOfferHero" class="brandOfferHero">
+  <div class="brandOfferTitle">🔥 RAIPUR BEST OFFERS 🔥</div>
+  <div class="brandOfferSub">15 Brands • Special Offers</div>
+  <button onclick="openOffers()">👆 Tap to See Offers</button>
+</div>
+>
